@@ -46,10 +46,11 @@ function makeGuess(){
     }
     else if(userGuess == answer){
         msg.textContent = "Correct! It took " + score + " tries.";
+        reset();
+        updateScore();
     }
     else{
         msg.textContent = "Too high, guess again";
-        reset();
         }
     }
     function reset(){
