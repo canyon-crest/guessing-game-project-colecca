@@ -35,7 +35,7 @@ function play(){
 }
 function makeGuess(){
     let userGuess = parseInt(guess.value);
-    if(isNaN(userGuess.guess || userGuess <1 || userGuess > level)){
+    if(isNaN(userGuess) || userGuess <1 || userGuess > level){
         msg.textContent = "INVALID, guess a number fool!";
         return;
     }
@@ -73,7 +73,7 @@ function makeGuess(){
         // leaderboard
         const lb = document.getElementsByName("leaderboard");
 
-        for(let i = 0; i<score.length; i++){
+        for(let i = 0; i<scoreArr.length; i++){
             sum+= scoreArr[i];
             if(i < lb.length){
                 lb[i].textContent = scoreArr[i];
