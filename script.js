@@ -10,6 +10,17 @@ const scoreArr = [];
 // event listeners 
 playBtn.addEventListener("click", play);
 guessBtn.addEventListener("click", makeGuess);
+nameBtn.addEventListener("click", enterName);
+
+
+function enterName(){
+    username = nameInput.value.charAt(0).toUpperCase() + nameInput.value.slice(1).toLowerCase();
+    if 
+    nameBtn.disabled = true;
+nameInput.disabled = true;
+}
+
+
 
 function time(){
     let d = new Date();
@@ -36,21 +47,21 @@ function play(){
 function makeGuess(){
     let userGuess = parseInt(guess.value);
     if(isNaN(userGuess) || userGuess <1 || userGuess > level){
-        msg.textContent = "INVALID, guess a number fool!";
+        msg.textContent = "INVALID, guess a number" + nameinput + "!";
         return;
     }
     score++;
 
     if(userGuess < answer){
-        msg.textContent = "Too low, guess again"
+        msg.textContent = "Too low, guess again," + name1 + "!"
     }
     else if(userGuess == answer){
-        msg.textContent = "Correct! It took " + score + " tries.";
+        msg.textContent = "Correct!" + name1 + "It took " + score + " tries.";
         reset();
         updateScore();
     }
     else{
-        msg.textContent = "Too high, guess again";
+        msg.textContent = "Too high, guess again," + name1 + "!";
         }
     }
     function reset(){
