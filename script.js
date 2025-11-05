@@ -74,6 +74,7 @@ function makeGuess(){
         msg.textContent = "INVALID, guess a number " + username + "!";
         return;
     }
+    
     score++;
 
     if(userGuess < answer){
@@ -87,7 +88,10 @@ function makeGuess(){
     else{
         msg.textContent = "Too high, guess again, " + username + "!";
         }
-    }
+
+}
+
+    
     function reset(){
         guessBtn.disabled = true;
         guess.value = "";
@@ -128,17 +132,4 @@ function giveHint(){
     else if(rel <= 0.4) proximity = "Cold";
     else proximity = "Freezing!";
     msg.textContent = "You're " + proximity;    
-}
-
-if(score/level <= 0.1){
-    msg.textContent += " Amazing, you're a Guessing Guru!";
-}
-else if(score/level <= 0.2){
-    msg.textContent += " Good, You're a Guessing Pro!";
-}
-else if(score/level <= 0.3){
-    msg.textContent += "OK, You're a Guessing Novice!";
-}
-else{
-    msg.textContent += " You might want to practice more.";
 }
