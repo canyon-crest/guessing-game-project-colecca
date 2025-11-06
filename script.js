@@ -144,7 +144,8 @@ function makeGuess(){
     score++;
 
     if(userGuess < answer){
-        msg.textContent = "Too low, guess again, " + username + "!"
+        msg.textContent = "Too low, guess again, " + username + "!";
+        playSound("wrong");
     }
     else if(userGuess == answer){
        let roundEndTime = new Date().getTime();
@@ -153,6 +154,7 @@ function makeGuess(){
        totalTime += roundDuration;
     totalGames++;
     let avgTimeSeconds = (totalTime / totalGames / 1000).toFixed(2);
+    playSound("correct");
 
       
        msg.textContent = "Correct, " + username + "! It took " + score + 
@@ -175,7 +177,8 @@ function makeGuess(){
     }
     else{
         msg.textContent = "Too high, guess again, " + username + "!";
-        }
+       playSound("wrong");
+    }
 
 }
 
@@ -222,4 +225,12 @@ function giveHint(){
     msg.textContent = "You're " + proximity;    
 }
 
-
+function playSound(type){
+    const audio = new Audio(type === "correct" ? "ding.mp3" : "buzzer.mp3");
+    audio.play();
+}
+function animateMessage(message) {
+    msg.textContent = message;
+    msg.classList.add("shake");
+    setTimeout(() => msg.classList.remove("shake"), 500);
+}
