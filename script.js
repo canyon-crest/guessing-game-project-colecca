@@ -1,5 +1,65 @@
-// time
-date.textContent = time();
+
+
+let roundStartTime;       // timestamp when round starts
+let fastestTime = null;   // fastest round duration in milliseconds
+let totalTime = 0;
+let totalGames = 0;
+
+window.onload = function() {
+  // Adds suffix for day (1st, 2nd, 3rd, etc.)
+  function getDateSuffix(day) {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  }
+
+  // Updates date + time
+  function showDateTime() {
+    const now = new Date();
+
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    const dayName = days[now.getDay()];
+    const monthName = months[now.getMonth()];
+    const date = now.getDate();
+    const suffix = getDateSuffix(date);
+    const year = now.getFullYear();
+
+    let hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    const seconds = now.getSeconds().toString().padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+
+    const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
+    const dateString = `${dayName}, ${monthName} ${date}${suffix}, ${year}`;
+
+    document.getElementById("dateTime").textContent = `${dateString} — ${timeString}`;
+  }
+
+  // Show immediately, then update every second
+  showDateTime();
+  setInterval(showDateTime, 1000);
+};
+
+const playBtn = document.getElementById("playBtn");
+const guessBtn = document.getElementById("guessBtn");
+const nameBtn = document.getElementById("nameBtn");
+const giveUpBtn = document.getElementById("giveUpBtn");
+const hintBtn = document.getElementById("hintBtn");
+const nameInput = document.getElementById("nameInput");
+const msg = document.getElementById("msg");
+const wins = document.getElementById("wins");
+const avgScore = document.getElementById("avgScore");
+const guess = document.getElementById("guess");
 
 // global variables/constants 
 
@@ -64,15 +124,21 @@ function play(){
         }
 }
     answer = Math.floor(Math.random()*level)+1;
-    makeGuess.textContent = "Level: " + level;
+    msg.textContent = "Level: " + level;
     guess.placeholder = answer; 
     score=0;
+
+    roundStartTime = new Date().getTime(); // store start time in ms
+
 }
 function makeGuess(){
     let userGuess = parseInt(guess.value);
     if(isNaN(userGuess) || userGuess <1 || userGuess > level){
         msg.textContent = "INVALID, guess a number " + username + "!";
         return;
+        document.getElementById("fastestTime").textContent = 
+    "Fastest Game: " + (fastestTime / 1000).toFixed(2) + " seconds";
+
     }
     
     score++;
@@ -81,9 +147,31 @@ function makeGuess(){
         msg.textContent = "Too low, guess again, " + username + "!"
     }
     else if(userGuess == answer){
-        msg.textContent = "Correct, " + username + "!" + " It took " + score + " tries.";
-        reset();
-        updateScore();
+       let roundEndTime = new Date().getTime();
+       let roundDuration = roundEndTime - roundStartTime; // milliseconds
+       let roundSeconds = (roundDuration / 1000).toFixed(2);
+       totalTime += roundDuration;
+    totalGames++;
+    let avgTimeSeconds = (totalTime / totalGames / 1000).toFixed(2);
+
+      
+       msg.textContent = "Correct, " + username + "! It took " + score + 
+                      " tries and " + roundSeconds + " seconds.";
+
+    // Update fastestTime if this is a new record
+    if (fastestTime === null || roundDuration < fastestTime) {
+        fastestTime = roundDuration;
+       // alert("🎉 New fastest game! Time: " + roundSeconds + " seconds");
+    }
+
+    // Optional: update on-page display
+    document.getElementById("fastestTime").textContent = 
+        "Fastest Game: " + (fastestTime / 1000).toFixed(2) + " seconds";
+
+        document.getElementById("avgTime").textContent =
+        "Average Time per Game: " + avgTimeSeconds + " seconds";
+    reset();
+    updateScore();
     }
     else{
         msg.textContent = "Too high, guess again, " + username + "!";
@@ -133,3 +221,5 @@ function giveHint(){
     else proximity = "Freezing!";
     msg.textContent = "You're " + proximity;    
 }
+
+
